@@ -13,6 +13,7 @@ const ScooterApp = require('../src/ScooterApp')
 // rent scooter
 
 // dock scooter
+const scooterApp = new ScooterApp()
 
 describe('ScooterApp', () => {
   let scooterApp;
@@ -37,26 +38,34 @@ describe('ScooterApp', () => {
     });
   });
 })
-  describe('loginUser', () => {
-    it('should login an existing user', () => {
-      const user = scooterApp.loginUser('User', 'Password', 20);
-      scooterApp.loginUser('User', 'Password');
-      expect(user.isLoggedIn()).toBe(true);
-      expect(console.log).toHaveBeenCalledWith('User has been logged in.');
-    });
-})
 
-    it('should throw an error if username or password is incorrect', () => {
-      expect(() => scooterApp.loginUser('testUser', 'wrongPassword')).toThrowError('Username or password is incorrect');
-      expect(() => scooterApp.loginUser('wrongUsername', 'testPassword')).toThrowError('Username or password is incorrect');
-    });
+describe('loginUser', () => {
+  let user;
+
+  beforeEach(() => {
+    user = scooterApp.registerUser('testUser', 'testPassword', 20);
+  });
+
+  test('logs in a registered user', () => {
+    scooterApp.loginUser('testUser', 'testPassword');
+    expect(user.loggedIn).toBe(true);
+  });
+
+  test('throws an error if user is not found', () => {
+    expect(() => scooterApp.loginUser('User1', 'Password1')).toThrow('Username or password is incorrect');
+  });
+
+  test('throws an error if password is incorrect', () => {
+    expect(() => scooterApp.loginUser('testUser', 'wrongPassword')).toThrow('Username or password is incorrect');
+  });
+});
 
   describe('logoutUser', () => {
     it('should logout a logged-in user', () => {
       const user = scooterApp.registerUser('testUser', 'testPassword', 20);
       user.login();
       scooterApp.logoutUser('testUser');
-      expect(username.isLoggedIn()).toBe(false);
+      expect(user.isLoggedIn()).toBe(false);
       expect(console.log).toHaveBeenCalledWith('User has successfully logged out');
     });
 
@@ -83,10 +92,10 @@ describe('ScooterApp', () => {
 
   describe('dockScooter', () => {
     test('docks a scooter at the station', () => {
-      const station = 'Berlin';
+      const station = 'Manchester';
       const scooter = new Scooter(station);
-      scooterApp.dockStation(scooter, station);
-      expect(app.stations[station]).toContain(scooter);
+      scooterApp.dockScooter(scooter, station);
+      expect(scooterApp.dockStation[station]).toContain(scooter);
     });
 
     test('throws an error if station does not exist', () => {

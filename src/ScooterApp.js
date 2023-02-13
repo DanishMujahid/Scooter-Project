@@ -36,7 +36,7 @@ class ScooterApp {
   // If the user cannot be located or if the password is incorrect, then throw an error: Username or password is incorrect.
 
   loginUser(username, password) {
-  if (!(this.registeredUser.hasOwnProperty(username)) && (password !== this.registeredUser[username].password)){
+  if (!(this.registeredUser.hasOwnProperty(username)) && (password !== this.registeredUser[password].password)){
     throw newError("Username or password is incorrect")
   } else {
     this.registeredUser[username].login(password)
